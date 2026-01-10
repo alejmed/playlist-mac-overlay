@@ -11,7 +11,7 @@ final class ImageProcessor {
     var blurRadius: CGFloat = 60
 
     /// Size ratio of centered album art relative to screen height
-    var albumArtSizeRatio: CGFloat = 0.4
+    var albumArtSizeRatio: CGFloat = 0.3
 
     /// Creates a wallpaper image with blurred background and centered album art
     /// - Parameters:
@@ -98,10 +98,9 @@ final class ImageProcessor {
         let centeredImage = scaledImage.transformed(by: CGAffineTransform(translationX: xOffset, y: yOffset))
 
         // Apply rounded corners
-        let roundedImage = applyRoundedCorners(to: centeredImage, radius: artSize * 0.03)
+        let roundedImage = applyRoundedCorners(to: centeredImage, radius: artSize * 0.05)
 
-        // Add shadow
-        return addShadow(to: roundedImage ?? centeredImage)
+        return roundedImage ?? centeredImage
     }
 
     /// Applies rounded corners to an image
