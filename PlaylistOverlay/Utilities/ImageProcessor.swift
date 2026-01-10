@@ -179,8 +179,8 @@ final class ImageProcessor {
 
         // Calculate positions
         let albumArtSize = min(canvasSize.width, canvasSize.height) * albumArtSizeRatio
-        let albumArtBottom = (canvasSize.height + albumArtSize) / 2
-        let textY = albumArtBottom + 80 // Below the album art
+        let albumArtBottom = (canvasSize.height - albumArtSize) / 2
+        let titleY = albumArtBottom - 60 // Below the album art
 
         // Title
         let titleFont = NSFont.systemFont(ofSize: 48, weight: .semibold)
@@ -191,7 +191,7 @@ final class ImageProcessor {
         let titleString = NSAttributedString(string: title, attributes: titleAttributes)
         let titleSize = titleString.size()
         let titleX = (canvasSize.width - titleSize.width) / 2
-        titleString.draw(at: NSPoint(x: titleX, y: textY))
+        titleString.draw(at: NSPoint(x: titleX, y: titleY))
 
         // Artist
         let artistFont = NSFont.systemFont(ofSize: 36, weight: .regular)
@@ -202,7 +202,7 @@ final class ImageProcessor {
         let artistString = NSAttributedString(string: artist, attributes: artistAttributes)
         let artistSize = artistString.size()
         let artistX = (canvasSize.width - artistSize.width) / 2
-        let artistY = textY + 20 // Below title
+        let artistY = titleY - 50 // Below title
         artistString.draw(at: NSPoint(x: artistX, y: artistY))
 
         newImage.unlockFocus()
