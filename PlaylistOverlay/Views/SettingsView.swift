@@ -1,7 +1,12 @@
-import LaunchAtLogin
 import SwiftUI
 
-/// Settings window view
+/// Settings window view for configuring app preferences.
+///
+/// Provides tabs for:
+/// - **General**: Enable/disable features, restore wallpaper, clear cache
+/// - **Appearance**: Adjust blur intensity and album art size
+/// - **Sources**: Toggle Spotify and Apple Music detection
+/// - **About**: App information and GitHub link
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @AppStorage("blurRadius") private var blurRadius: Double = 60
