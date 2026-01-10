@@ -1,18 +1,47 @@
 import Combine
 import SwiftUI
 
-/// Shared application state
+/// Central application state manager that coordinates all app services and user preferences.
+///
+/// This class serves as the single source of truth for the application, managing:
+/// - Media detection from Spotify and Apple Music
+/// - Wallpaper generation and updates
+/// - Floating overlay window visibility
+/// - User preferences persistence via `@AppStorage`
+/// - Reactive bindings between services
+///
+/// All methods run on the `@MainActor` to ensure thread-safe UI updates.
+///
+/// ## Usage
+/// The `AppState` is created once in `PlaylistOverlayApp` and shared across
+/// all views via `@EnvironmentObject`:
+///
+/// ```swift
+/// struct SomeView: View {
+///     @EnvironmentObject var appState: AppState
+///
+///     var body: some View {
+///         Text(appState.mediaService.currentlyPlaying?.title ?? "Nothing playing")
+///     }
+/// }
+/// ```
 @MainActor
 final class AppState: ObservableObject {
 
     // MARK: - Services
 
+    /// Service for detecting currently playing media from Spotify and Apple Music
     let mediaService = MediaDetectionService()
+
+    /// Service for generating and setting desktop wallpapers
     let wallpaperService = WallpaperService()
+
+    /// Controller for managing the floating overlay window
     let overlayController = OverlayWindowController()
 
     // MARK: - User Preferences
 
+    /// Whether wallpaper updates are enabled (persisted via UserDefaults)
     @AppStorage("wallpaperEnabled") var wallpaperEnabled = true {
         didSet {
             if !wallpaperEnabled {
@@ -23,6 +52,7 @@ final class AppState: ObservableObject {
         }
     }
 
+    /// Whether the floating overlay window is enabled (persisted via UserDefaults)
     @AppStorage("overlayEnabled") var overlayEnabled = false {
         didSet {
             if overlayEnabled {

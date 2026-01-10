@@ -2,17 +2,50 @@ import AppKit
 import Combine
 import Foundation
 
-/// Manages setting and updating the macOS desktop wallpaper
+/// Manages setting and updating the macOS desktop wallpaper based on album art.
+///
+/// This service handles:
+/// - Generating wallpaper images from album artwork using `ImageProcessor`
+/// - Setting wallpapers on all connected displays via `NSWorkspace` API
+/// - Caching generated images to avoid redundant processing
+/// - Saving and restoring original wallpapers
+/// - Managing temporary wallpaper files in Application Support
+///
+/// The service works around macOS's wallpaper caching by generating unique filenames
+/// for each wallpaper update, ensuring the system detects the change.
+///
+/// ## Usage
+/// ```swift
+/// let service = WallpaperService()
+/// try await service.updateWallpaper(for: nowPlaying)
+/// try await service.restoreOriginalWallpaper() // when done
+/// ```
 final class WallpaperService: ObservableObject {
 
+    // MARK: - Published Properties
+
+    /// Whether the service is actively managing the wallpaper
     @Published private(set) var isActive = false
+
+    /// The last error encountered, if any
     @Published private(set) var lastError: Error?
 
+    // MARK: - Private Properties
+
+    /// Image processor for generating blurred wallpaper images
     private let imageProcessor = ImageProcessor()
+
+    /// File manager for handling wallpaper file operations
     private let fileManager = FileManager.default
+
+    /// Cache mapping track cache keys to generated wallpaper file URLs
     private var imageCache: [String: URL] = [:]
 
-    /// Directory for storing generated wallpapers
+    /// Directory for storing generated wallpapers in Application Support.
+    ///
+    /// Located at: `~/Library/Application Support/PlaylistOverlay/Wallpapers/`
+    ///
+    /// The directory is created automatically if it doesn't exist.
     private lazy var wallpaperDirectory: URL = {
         let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let dir = appSupport.appendingPathComponent("PlaylistOverlay/Wallpapers", isDirectory: true)
@@ -22,14 +55,25 @@ final class WallpaperService: ObservableObject {
         return dir
     }()
 
-    /// Original wallpaper URL before the app modified it (for restoration)
+    /// Original wallpaper URLs before the app modified them, keyed by screen.
+    ///
+    /// Used to restore the user's original wallpapers when the app is disabled
+    /// or when `restoreOriginalWallpaper()` is called.
     private var originalWallpaper: [NSScreen: URL] = [:]
 
+    // MARK: - Initialization
+
+    /// Initializes the wallpaper service and saves the current wallpapers for restoration
     init() {
         saveOriginalWallpapers()
     }
 
-    /// Saves the current wallpaper for each screen so it can be restored later
+    // MARK: - Private Methods
+
+    /// Saves the current wallpaper for each screen so it can be restored later.
+    ///
+    /// This is called once during initialization to capture the user's original
+    /// wallpapers before the app makes any modifications.
     private func saveOriginalWallpapers() {
         for screen in NSScreen.screens {
             if let url = NSWorkspace.shared.desktopImageURL(for: screen) {
@@ -38,7 +82,20 @@ final class WallpaperService: ObservableObject {
         }
     }
 
-    /// Updates the wallpaper with the given track's album art
+    // MARK: - Public Methods
+
+    /// Updates the wallpaper with the given track's album art.
+    ///
+    /// This method:
+    /// 1. Checks the cache for a previously generated wallpaper
+    /// 2. If not cached, generates a new wallpaper image with blurred background
+    /// 3. Saves the image to a file
+    /// 4. Sets the wallpaper on all connected displays
+    /// 5. Caches the result for future use
+    ///
+    /// - Parameter track: The currently playing track with artwork
+    /// - Throws: `WallpaperError` if artwork is missing, screen is unavailable,
+    ///           image generation fails, or wallpaper setting fails
     func updateWallpaper(for track: NowPlaying) async throws {
         guard let artwork = track.artworkImage else {
             throw WallpaperError.noArtwork
@@ -142,12 +199,24 @@ final class WallpaperService: ObservableObject {
         imageCache.removeAll()
     }
 
+    // MARK: - Error Types
+
+    /// Errors that can occur during wallpaper operations
     enum WallpaperError: Error, LocalizedError {
+
+        /// The track has no artwork available
         case noArtwork
+
+        /// No screen could be detected
         case noScreen
+
+        /// Failed to generate the wallpaper image
         case imageGenerationFailed
+
+        /// Failed to set the wallpaper (includes underlying error)
         case settingFailed(Error)
 
+        /// Human-readable error descriptions
         var errorDescription: String? {
             switch self {
             case .noArtwork:

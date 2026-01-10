@@ -2,18 +2,54 @@ import AppKit
 import Combine
 import Foundation
 
-/// Detects currently playing music from Apple Music
+/// Detects currently playing music from Apple Music using AppleScript polling.
+///
+/// Unlike Spotify, Apple Music does not broadcast distributed notifications for
+/// playback changes. This detector uses a polling-based approach:
+/// - Polls every 2-3 seconds via AppleScript to check current track
+/// - Starts polling when Music app launches
+/// - Stops polling when Music app quits
+///
+/// The detector extracts artwork by saving it to a temporary file via AppleScript,
+/// since AppleScript's `data of artwork` returns binary data that requires
+/// file I/O to convert to an NSImage.
+///
+/// ## Usage
+/// ```swift
+/// let detector = AppleMusicDetector()
+/// detector.$nowPlaying.sink { track in
+///     print("Now playing: \(track?.title ?? "Nothing")")
+/// }
+/// ```
 final class AppleMusicDetector: ObservableObject {
 
+    // MARK: - Published Properties
+
+    /// The currently playing track information, or `nil` if nothing is playing
     @Published private(set) var nowPlaying: NowPlaying?
+
+    /// Whether Apple Music is currently running on the system
     @Published private(set) var isRunning = false
 
+    // MARK: - Private Properties
+
+    /// Timer for periodic polling of Apple Music's current track
     private var pollingTimer: Timer?
+
+    /// Set of Combine cancellables for notification subscriptions
     private var cancellables = Set<AnyCancellable>()
 
-    /// Polling interval in seconds
+    // MARK: - Configuration
+
+    /// Polling interval in seconds (default: 2.0 seconds)
+    ///
+    /// This determines how frequently the detector checks Apple Music for track changes.
+    /// Lower values provide more responsive updates but use more CPU.
     var pollingInterval: TimeInterval = 2.0
 
+    // MARK: - Initialization
+
+    /// Initializes the Apple Music detector and sets up app state listeners
     init() {
         setupAppStateListeners()
         checkIfMusicRunning()
