@@ -18,7 +18,7 @@ final class TransitionService {
     /// This creates a full-screen overlay window that:
     /// 1. Shows the new image with opacity 0
     /// 2. Fades in the new image (cross-fade effect)
-    /// 3. Updates the actual wallpaper behind the overlay
+    /// 3. Updates the actual wallpaper behind the overlay (at midpoint)
     /// 4. Fades out and removes the overlay
     ///
     /// - Parameter newImage: The new wallpaper image to transition to
@@ -26,10 +26,11 @@ final class TransitionService {
     func performTransition(to newImage: NSImage) async {
         guard let screen = NSScreen.main else { return }
 
-        // Create transition view
+        // Create transition view controller
+        let viewModel = TransitionViewModel(duration: transitionDuration)
         let transitionView = TransitionView(
             image: newImage,
-            duration: transitionDuration
+            viewModel: viewModel
         )
 
         let hostingView = NSHostingView(rootView: transitionView)
@@ -55,8 +56,16 @@ final class TransitionService {
         // Order behind everything - stay at desktop level
         window.orderBack(nil)
 
-        // Wait for transition to complete
-        try? await Task.sleep(nanoseconds: UInt64(transitionDuration * 1_000_000_000))
+        // Wait for fade in to complete, then start fade out
+        let fadeInDuration = transitionDuration * 0.6 // 60% of time for fade in
+        try? await Task.sleep(nanoseconds: UInt64(fadeInDuration * 1_000_000_000))
+
+        // Start fade out
+        await viewModel.fadeOut()
+
+        // Wait for fade out to complete
+        let fadeOutDuration = transitionDuration * 0.4 // 40% of time for fade out
+        try? await Task.sleep(nanoseconds: UInt64(fadeOutDuration * 1_000_000_000))
 
         // Close and cleanup
         window.orderOut(nil)
@@ -71,24 +80,45 @@ final class TransitionService {
     }
 }
 
+/// View model to control the transition animation state
+@MainActor
+private class TransitionViewModel: ObservableObject {
+    @Published var opacity: Double = 0.0
+    let duration: TimeInterval
+
+    init(duration: TimeInterval) {
+        self.duration = duration
+    }
+
+    func start() {
+        // Smooth fade in with custom easing curve
+        // Uses a cubic bezier curve for a more natural, fluid transition
+        withAnimation(.timingCurve(0.4, 0.0, 0.2, 1.0, duration: duration * 0.6)) {
+            opacity = 1.0
+        }
+    }
+
+    func fadeOut() {
+        // Smooth fade out
+        withAnimation(.timingCurve(0.4, 0.0, 0.2, 1.0, duration: duration * 0.4)) {
+            opacity = 0.0
+        }
+    }
+}
+
 /// SwiftUI view that displays the transition animation
 private struct TransitionView: View {
     let image: NSImage
-    let duration: TimeInterval
-
-    @State private var opacity: Double = 0.0
+    @ObservedObject var viewModel: TransitionViewModel
 
     var body: some View {
         Image(nsImage: image)
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .opacity(opacity)
+            .opacity(viewModel.opacity)
             .onAppear {
-                // Fade in
-                withAnimation(.easeInOut(duration: duration)) {
-                    opacity = 1.0
-                }
+                viewModel.start()
             }
     }
 }

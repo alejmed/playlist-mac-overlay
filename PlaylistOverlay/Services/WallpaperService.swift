@@ -150,9 +150,10 @@ final class WallpaperService: ObservableObject {
             // Start the visual transition overlay
             async let transitionTask: Void = transitionService.performTransition(to: image)
 
-            // Update the actual wallpaper behind the transition
-            // Wait a bit for the transition to get going
-            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            // Update the actual wallpaper at the midpoint of the transition
+            // This is when the new image is at ~50% opacity for smoothest crossfade
+            let midpoint = transitionService.transitionDuration / 2.0
+            try await Task.sleep(nanoseconds: UInt64(midpoint * 1_000_000_000))
             try await setWallpaper(url: url)
 
             // Wait for transition to complete
