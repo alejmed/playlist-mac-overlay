@@ -1,0 +1,421 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01C5A5F9C501A53620689A60 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254C19BAC0B32B6DF138353F /* OverlayWindow.swift */; };
+		26549D05FBFDD39C779FC784 /* PlaylistOverlayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DA511FE1684B38B5AD591E /* PlaylistOverlayApp.swift */; };
+		3B90EC28111285835A38B3AA /* SpotifyDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE0A71414CC90F5C8074C6C /* SpotifyDetector.swift */; };
+		3F2C6CD4092FBB1538BF083C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334AD286F6AF934D2796D656 /* AppState.swift */; };
+		4EBFC261DE2A230350AFF0EF /* WallpaperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3837B7185FD8658FE9841E /* WallpaperService.swift */; };
+		6A2E3F5B03B5237B1C694B0D /* MediaDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB53DF70B7C7E35EBE3AB43D /* MediaDetectionService.swift */; };
+		78D20A61B33B92F61E5AAFEB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571D469F1DE405EEBFFFB333 /* SettingsView.swift */; };
+		83B79ACA2A1BAA8DFE5F0F17 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10593BA7BD5D776F2D272CB2 /* MenuBarView.swift */; };
+		9E81D91A3ED7788A41CC2764 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA69A703B7B22D761AB4A863 /* ImageProcessor.swift */; };
+		A99EE122B7349DCE9AA2B000 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */; };
+		B75EA91F3B434540A7C8C265 /* AppleMusicDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E12B98D8EFBDE261EE9377B /* AppleMusicDetector.swift */; };
+		C549C850B93C86FD842FD558 /* AlbumArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AA35CDC5F384316E4418D2 /* AlbumArtView.swift */; };
+		CB7D19403FC44950DDF40E7D /* PlayerSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5ABCB1D74BE76E92A4F121 /* PlayerSource.swift */; };
+		CEDDA4444070A2AB8E17DEEA /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B4ABFAA6DD62EE3346E9C /* NowPlaying.swift */; };
+		F405C6A383841F481E8BFC34 /* AppleScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FE320916C2B1797DB62C9E /* AppleScriptRunner.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		10593BA7BD5D776F2D272CB2 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		254C19BAC0B32B6DF138353F /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
+		27FE320916C2B1797DB62C9E /* AppleScriptRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScriptRunner.swift; sourceTree = "<group>"; };
+		2BE0A71414CC90F5C8074C6C /* SpotifyDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDetector.swift; sourceTree = "<group>"; };
+		2D3837B7185FD8658FE9841E /* WallpaperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperService.swift; sourceTree = "<group>"; };
+		334AD286F6AF934D2796D656 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		44E3B053380E324D228AC0DB /* PlaylistOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaylistOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		571D469F1DE405EEBFFFB333 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8E12B98D8EFBDE261EE9377B /* AppleMusicDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicDetector.swift; sourceTree = "<group>"; };
+		95DA511FE1684B38B5AD591E /* PlaylistOverlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistOverlayApp.swift; sourceTree = "<group>"; };
+		A0B7F478E7AE7B05DC701362 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A41AB54DDF52740265E59CB0 /* PlaylistOverlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PlaylistOverlay.entitlements; sourceTree = "<group>"; };
+		BA69A703B7B22D761AB4A863 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		C3AA35CDC5F384316E4418D2 /* AlbumArtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumArtView.swift; sourceTree = "<group>"; };
+		D45B4ABFAA6DD62EE3346E9C /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
+		DC5ABCB1D74BE76E92A4F121 /* PlayerSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerSource.swift; sourceTree = "<group>"; };
+		FB53DF70B7C7E35EBE3AB43D /* MediaDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDetectionService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1790F58CCDA44F2A188F4BD4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D45B4ABFAA6DD62EE3346E9C /* NowPlaying.swift */,
+				DC5ABCB1D74BE76E92A4F121 /* PlayerSource.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1F762A876402B70D0D56386C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				27FE320916C2B1797DB62C9E /* AppleScriptRunner.swift */,
+				BA69A703B7B22D761AB4A863 /* ImageProcessor.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		439D2DE2EA9BA218BC07FC12 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C3AA35CDC5F384316E4418D2 /* AlbumArtView.swift */,
+				10593BA7BD5D776F2D272CB2 /* MenuBarView.swift */,
+				254C19BAC0B32B6DF138353F /* OverlayWindow.swift */,
+				571D469F1DE405EEBFFFB333 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4454D76F653DBF7A225AA461 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2D3837B7185FD8658FE9841E /* WallpaperService.swift */,
+				54D5FCE02C2370CF86038382 /* MediaDetection */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		54D5FCE02C2370CF86038382 /* MediaDetection */ = {
+			isa = PBXGroup;
+			children = (
+				8E12B98D8EFBDE261EE9377B /* AppleMusicDetector.swift */,
+				FB53DF70B7C7E35EBE3AB43D /* MediaDetectionService.swift */,
+				2BE0A71414CC90F5C8074C6C /* SpotifyDetector.swift */,
+			);
+			path = MediaDetection;
+			sourceTree = "<group>";
+		};
+		ADF01EC96614621D1625F7B2 /* PlaylistOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				C3929FE1F337A4F2223A4C0E /* App */,
+				1790F58CCDA44F2A188F4BD4 /* Models */,
+				EC9DCCBD586078085CF90CEC /* Resources */,
+				4454D76F653DBF7A225AA461 /* Services */,
+				1F762A876402B70D0D56386C /* Utilities */,
+				439D2DE2EA9BA218BC07FC12 /* Views */,
+			);
+			path = PlaylistOverlay;
+			sourceTree = "<group>";
+		};
+		C3929FE1F337A4F2223A4C0E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				334AD286F6AF934D2796D656 /* AppState.swift */,
+				95DA511FE1684B38B5AD591E /* PlaylistOverlayApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E4A609B4A7114EE303089262 = {
+			isa = PBXGroup;
+			children = (
+				ADF01EC96614621D1625F7B2 /* PlaylistOverlay */,
+				F21ECE780785C401BC78E667 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EC9DCCBD586078085CF90CEC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */,
+				A0B7F478E7AE7B05DC701362 /* Info.plist */,
+				A41AB54DDF52740265E59CB0 /* PlaylistOverlay.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F21ECE780785C401BC78E667 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				44E3B053380E324D228AC0DB /* PlaylistOverlay.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FD1760C45E13DC7958CF82A9 /* PlaylistOverlay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A8DA75033673EE3FE749D43 /* Build configuration list for PBXNativeTarget "PlaylistOverlay" */;
+			buildPhases = (
+				C9510A400050B8AF97AEC399 /* Sources */,
+				DA87FAC85C033B5071088F04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlaylistOverlay;
+			packageProductDependencies = (
+			);
+			productName = PlaylistOverlay;
+			productReference = 44E3B053380E324D228AC0DB /* PlaylistOverlay.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E63B297FB2BA93811E4D445E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					FD1760C45E13DC7958CF82A9 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 368A76A15BA71930171EEB45 /* Build configuration list for PBXProject "PlaylistOverlay" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = E4A609B4A7114EE303089262;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FD1760C45E13DC7958CF82A9 /* PlaylistOverlay */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DA87FAC85C033B5071088F04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A99EE122B7349DCE9AA2B000 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9510A400050B8AF97AEC399 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C549C850B93C86FD842FD558 /* AlbumArtView.swift in Sources */,
+				3F2C6CD4092FBB1538BF083C /* AppState.swift in Sources */,
+				B75EA91F3B434540A7C8C265 /* AppleMusicDetector.swift in Sources */,
+				F405C6A383841F481E8BFC34 /* AppleScriptRunner.swift in Sources */,
+				9E81D91A3ED7788A41CC2764 /* ImageProcessor.swift in Sources */,
+				6A2E3F5B03B5237B1C694B0D /* MediaDetectionService.swift in Sources */,
+				83B79ACA2A1BAA8DFE5F0F17 /* MenuBarView.swift in Sources */,
+				CEDDA4444070A2AB8E17DEEA /* NowPlaying.swift in Sources */,
+				01C5A5F9C501A53620689A60 /* OverlayWindow.swift in Sources */,
+				CB7D19403FC44950DDF40E7D /* PlayerSource.swift in Sources */,
+				26549D05FBFDD39C779FC784 /* PlaylistOverlayApp.swift in Sources */,
+				78D20A61B33B92F61E5AAFEB /* SettingsView.swift in Sources */,
+				3B90EC28111285835A38B3AA /* SpotifyDetector.swift in Sources */,
+				4EBFC261DE2A230350AFF0EF /* WallpaperService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B81007A7D7A26D381CD0AD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PlaylistOverlay/Resources/PlaylistOverlay.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = PlaylistOverlay/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alejmed.PlaylistOverlay;
+				PRODUCT_NAME = "Playlist Overlay";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9B2418FF230A0BBEDC52CDBB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		A2715CE1BECDCFA6EBD0D862 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		D12F466FB1A13D160916E2C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PlaylistOverlay/Resources/PlaylistOverlay.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = PlaylistOverlay/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alejmed.PlaylistOverlay;
+				PRODUCT_NAME = "Playlist Overlay";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		368A76A15BA71930171EEB45 /* Build configuration list for PBXProject "PlaylistOverlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2715CE1BECDCFA6EBD0D862 /* Debug */,
+				9B2418FF230A0BBEDC52CDBB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5A8DA75033673EE3FE749D43 /* Build configuration list for PBXNativeTarget "PlaylistOverlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B81007A7D7A26D381CD0AD1 /* Debug */,
+				D12F466FB1A13D160916E2C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E63B297FB2BA93811E4D445E /* Project object */;
+}
