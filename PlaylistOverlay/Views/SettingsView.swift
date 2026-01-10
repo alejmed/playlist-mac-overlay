@@ -75,7 +75,7 @@ struct SettingsView: View {
                     Slider(value: $blurRadius, in: 20...100, step: 5) {
                         Text("Blur")
                     }
-                    .onChange(of: blurRadius) { _, newValue in
+                    .onChange(of: blurRadius) { newValue in
                         appState.wallpaperService.setBlurRadius(CGFloat(newValue))
                     }
                 }
@@ -85,7 +85,7 @@ struct SettingsView: View {
                     Slider(value: $albumArtSize, in: 0.2...0.7, step: 0.05) {
                         Text("Size")
                     }
-                    .onChange(of: albumArtSize) { _, newValue in
+                    .onChange(of: albumArtSize) { newValue in
                         appState.wallpaperService.setAlbumArtSizeRatio(CGFloat(newValue))
                     }
                 }
@@ -99,14 +99,14 @@ struct SettingsView: View {
     private var sourcesTab: some View {
         Form {
             Section("Music Sources") {
-                Toggle(isOn: $appState.mediaService.spotifyEnabled) {
+                Toggle(isOn: appState.spotifyEnabled) {
                     HStack {
                         Image(systemName: "music.note")
                         Text("Spotify")
                     }
                 }
 
-                Toggle(isOn: $appState.mediaService.appleMusicEnabled) {
+                Toggle(isOn: appState.appleMusicEnabled) {
                     HStack {
                         Image(systemName: "music.quarternote.3")
                         Text("Apple Music")

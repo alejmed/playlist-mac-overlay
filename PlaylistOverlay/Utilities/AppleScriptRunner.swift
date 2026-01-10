@@ -1,6 +1,12 @@
+import AppKit
 import Foundation
 
-/// Executes AppleScript commands and returns results
+/// Executes AppleScript commands and returns results.
+///
+/// This utility provides async/await wrappers around `NSAppleScript` for executing
+/// AppleScript code and checking if applications are running.
+///
+/// All AppleScript execution happens on a background queue to avoid blocking the main thread.
 final class AppleScriptRunner {
 
     enum AppleScriptError: Error, LocalizedError {

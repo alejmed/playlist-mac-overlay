@@ -86,7 +86,7 @@ struct AlbumArtView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .onChange(of: nowPlaying.cacheKey) { _, _ in
+        .onChange(of: nowPlaying.cacheKey) { _ in
             imageLoaded = false
             withAnimation {
                 imageLoaded = true

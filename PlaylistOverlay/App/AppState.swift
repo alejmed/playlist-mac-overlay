@@ -65,6 +65,24 @@ final class AppState: ObservableObject {
         }
     }
 
+    // MARK: - Computed Properties
+
+    /// Binding to the Spotify enabled state in mediaService
+    var spotifyEnabled: Binding<Bool> {
+        Binding(
+            get: { self.mediaService.spotifyEnabled },
+            set: { self.mediaService.spotifyEnabled = $0 }
+        )
+    }
+
+    /// Binding to the Apple Music enabled state in mediaService
+    var appleMusicEnabled: Binding<Bool> {
+        Binding(
+            get: { self.mediaService.appleMusicEnabled },
+            set: { self.mediaService.appleMusicEnabled = $0 }
+        )
+    }
+
     // MARK: - Private
 
     private var cancellables = Set<AnyCancellable>()

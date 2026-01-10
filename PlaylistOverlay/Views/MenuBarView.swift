@@ -49,14 +49,14 @@ struct MenuBarView: View {
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
 
-                Toggle(isOn: $appState.mediaService.spotifyEnabled) {
+                Toggle(isOn: appState.spotifyEnabled) {
                     Label("Spotify", systemImage: "music.note")
                 }
                 .toggleStyle(.switch)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
 
-                Toggle(isOn: $appState.mediaService.appleMusicEnabled) {
+                Toggle(isOn: appState.appleMusicEnabled) {
                     Label("Apple Music", systemImage: "music.quarternote.3")
                 }
                 .toggleStyle(.switch)
