@@ -103,12 +103,19 @@ final class SpotifyDetector: ObservableObject {
     ///
     /// - Parameter notification: The distributed notification from Spotify
     private func handlePlaybackStateChanged(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else { return }
+        print("🎧 [SpotifyDetector] Received notification!")
+        guard let userInfo = notification.userInfo else {
+            print("⚠️ [SpotifyDetector] No userInfo in notification")
+            return
+        }
 
         let playerState = userInfo["Player State"] as? String ?? ""
         let isPlaying = playerState == "Playing"
+        print("   - Player State: \(playerState)")
+        print("   - Is Playing: \(isPlaying)")
 
         guard isPlaying else {
+            print("⏸️ [SpotifyDetector] Not playing, updating state")
             nowPlaying = nowPlaying.map { current in
                 NowPlaying(
                     title: current.title,
@@ -129,9 +136,17 @@ final class SpotifyDetector: ObservableObject {
         let album = userInfo["Album"] as? String ?? ""
         let trackId = userInfo["Track ID"] as? String
 
+        print("🎵 [SpotifyDetector] Track info:")
+        print("   - Title: \(title)")
+        print("   - Artist: \(artist)")
+        print("   - Album: \(album)")
+
         // Fetch artwork asynchronously
         Task { @MainActor in
+            print("🖼️ [SpotifyDetector] Fetching artwork...")
             let (artworkURL, artworkImage) = await fetchArtwork()
+            print("   - Artwork URL: \(artworkURL?.absoluteString ?? "nil")")
+            print("   - Artwork Image: \(artworkImage != nil ? "✅ Loaded" : "❌ Failed")")
 
             self.nowPlaying = NowPlaying(
                 title: title,

@@ -101,6 +101,7 @@ final class AppState: ObservableObject {
         mediaService.$currentlyPlaying
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] nowPlaying in
+                print("📱 [AppState] Track changed: \(nowPlaying?.title ?? "nil") - \(nowPlaying?.artist ?? "nil")")
                 Task { @MainActor in
                     await self?.handleTrackChange(nowPlaying)
                 }
@@ -121,21 +122,33 @@ final class AppState: ObservableObject {
 
     /// Handles track change events
     private func handleTrackChange(_ nowPlaying: NowPlaying?) async {
+        print("🎵 [AppState] handleTrackChange called")
+        print("   - nowPlaying: \(nowPlaying?.title ?? "nil")")
+        print("   - isPlaying: \(nowPlaying?.isPlaying ?? false)")
+        print("   - wallpaperEnabled: \(wallpaperEnabled)")
+        print("   - hasArtwork: \(nowPlaying?.artworkImage != nil)")
+
         guard let nowPlaying = nowPlaying, nowPlaying.isPlaying else {
+            print("⚠️ [AppState] Not playing or nil, skipping update")
             return
         }
 
         // Update wallpaper if enabled
         if wallpaperEnabled {
+            print("🖼️ [AppState] Attempting to update wallpaper...")
             do {
                 try await wallpaperService.updateWallpaper(for: nowPlaying)
+                print("✅ [AppState] Wallpaper updated successfully!")
             } catch {
-                print("Failed to update wallpaper: \(error)")
+                print("❌ [AppState] Failed to update wallpaper: \(error)")
             }
+        } else {
+            print("⏭️ [AppState] Wallpaper disabled, skipping")
         }
 
         // Update overlay if visible
         if overlayEnabled {
+            print("📺 [AppState] Updating overlay...")
             overlayController.updateContent(nowPlaying)
         }
     }
