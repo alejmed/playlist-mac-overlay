@@ -46,12 +46,14 @@ final class TransitionService {
         window.contentView = hostingView
         window.backgroundColor = .clear
         window.isOpaque = false
-        window.level = .screenSaver - 1 // Just below screen saver level
+        // Set to desktop level - just above the wallpaper but below all app windows
+        window.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)) + 1)
         window.ignoresMouseEvents = true
-        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
 
         transitionWindow = window
-        window.orderFront(nil)
+        // Order behind everything - stay at desktop level
+        window.orderBack(nil)
 
         // Wait for transition to complete
         try? await Task.sleep(nanoseconds: UInt64(transitionDuration * 1_000_000_000))
