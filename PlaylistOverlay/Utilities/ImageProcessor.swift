@@ -180,7 +180,7 @@ final class ImageProcessor {
         // Calculate positions
         let albumArtSize = min(canvasSize.width, canvasSize.height) * albumArtSizeRatio
         let albumArtBottom = (canvasSize.height - albumArtSize) / 2
-        let titleY = albumArtBottom - 60 // Below the album art
+        let titleY = albumArtBottom - 100 // Below the album art
 
         // Title
         let titleFont = NSFont.systemFont(ofSize: 48, weight: .semibold)
