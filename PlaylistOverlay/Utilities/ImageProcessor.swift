@@ -1,6 +1,7 @@
 import AppKit
 import CoreImage
 import CoreImage.CIFilterBuiltins
+import Foundation
 
 /// Processes images to create blurred wallpaper backgrounds
 final class ImageProcessor {
@@ -13,12 +14,17 @@ final class ImageProcessor {
     /// Size ratio of centered album art relative to screen height
     var albumArtSizeRatio: CGFloat = 0.3
 
+    /// Whether to show text overlay with song and artist info
+    var showTextOverlay: Bool = true
+
     /// Creates a wallpaper image with blurred background and centered album art
     /// - Parameters:
     ///   - artwork: The album artwork image
     ///   - screenSize: The target screen size
+    ///   - title: The song title for text overlay
+    ///   - artist: The artist name for text overlay
     /// - Returns: The generated wallpaper image
-    func createWallpaperImage(from artwork: NSImage, for screenSize: CGSize) -> NSImage? {
+    func createWallpaperImage(from artwork: NSImage, for screenSize: CGSize, title: String, artist: String) -> NSImage? {
         guard let cgImage = artwork.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             return nil
         }
@@ -46,7 +52,14 @@ final class ImageProcessor {
             return nil
         }
 
-        return NSImage(cgImage: outputCGImage, size: screenSize)
+        var wallpaperImage = NSImage(cgImage: outputCGImage, size: screenSize)
+
+        // Add text overlay if enabled
+        if showTextOverlay {
+            wallpaperImage = drawText(on: wallpaperImage, title: title, artist: artist, canvasSize: screenSize)
+        }
+
+        return wallpaperImage
     }
 
     /// Creates a blurred and scaled background image
@@ -154,6 +167,46 @@ final class ImageProcessor {
         }
 
         try data.write(to: url)
+    }
+
+    /// Draws text overlay on the wallpaper image
+    private func drawText(on image: NSImage, title: String, artist: String, canvasSize: CGSize) -> NSImage {
+        let newImage = NSImage(size: canvasSize)
+        newImage.lockFocus()
+
+        // Draw the original image
+        image.draw(in: NSRect(origin: .zero, size: canvasSize))
+
+        // Calculate positions
+        let albumArtSize = min(canvasSize.width, canvasSize.height) * albumArtSizeRatio
+        let albumArtY = (canvasSize.height - albumArtSize) / 2
+        let textY = albumArtY + albumArtSize + 40 // Below the album art
+
+        // Title
+        let titleFont = NSFont.systemFont(ofSize: 48, weight: .semibold)
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .font: titleFont,
+            .foregroundColor: NSColor.white
+        ]
+        let titleString = NSAttributedString(string: title, attributes: titleAttributes)
+        let titleSize = titleString.size()
+        let titleX = (canvasSize.width - titleSize.width) / 2
+        titleString.draw(at: NSPoint(x: titleX, y: textY))
+
+        // Artist
+        let artistFont = NSFont.systemFont(ofSize: 36, weight: .regular)
+        let artistAttributes: [NSAttributedString.Key: Any] = [
+            .font: artistFont,
+            .foregroundColor: NSColor.white.withAlphaComponent(0.8)
+        ]
+        let artistString = NSAttributedString(string: artist, attributes: artistAttributes)
+        let artistSize = artistString.size()
+        let artistX = (canvasSize.width - artistSize.width) / 2
+        let artistY = textY - 60 // Above title
+        artistString.draw(at: NSPoint(x: artistX, y: artistY))
+
+        newImage.unlockFocus()
+        return newImage
     }
 
     enum ImageProcessorError: Error {

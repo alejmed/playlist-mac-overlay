@@ -71,6 +71,8 @@ struct SettingsView: View {
     private var appearanceTab: some View {
         Form {
             Section("Wallpaper Style") {
+                Toggle("Show song and artist text", isOn: $appState.wallpaperTextOverlay)
+
                 VStack(alignment: .leading) {
                     Text("Blur Intensity: \(Int(blurRadius))")
                     Slider(value: $blurRadius, in: 20...100, step: 5) {

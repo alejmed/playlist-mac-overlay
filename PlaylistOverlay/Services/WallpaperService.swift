@@ -123,7 +123,7 @@ final class WallpaperService: ObservableObject {
         let screenSize = mainScreen.frame.size
 
         // Generate the wallpaper image
-        guard let wallpaperImage = imageProcessor.createWallpaperImage(from: artwork, for: screenSize) else {
+        guard let wallpaperImage = imageProcessor.createWallpaperImage(from: artwork, for: screenSize, title: track.title, artist: track.artist) else {
             throw WallpaperError.imageGenerationFailed
         }
 
@@ -230,6 +230,13 @@ final class WallpaperService: ObservableObject {
     /// - Parameter duration: Duration in seconds (0.3 - 2.0)
     func setTransitionDuration(_ duration: TimeInterval) {
         transitionService.transitionDuration = min(max(duration, 0.3), 2.0)
+    }
+
+    /// Sets whether to show text overlay on wallpapers
+    func setTextOverlayEnabled(_ enabled: Bool) {
+        imageProcessor.showTextOverlay = enabled
+        // Clear cache to regenerate with new settings
+        imageCache.removeAll()
     }
 
     // MARK: - Error Types

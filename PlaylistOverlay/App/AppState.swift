@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import AppKit
 
 /// Central application state manager that coordinates all app services and user preferences.
 ///
@@ -52,6 +53,13 @@ final class AppState: ObservableObject {
         }
     }
 
+    /// Whether to show text overlay on wallpaper (persisted via UserDefaults)
+    @AppStorage("wallpaperTextOverlay") var wallpaperTextOverlay = true {
+        didSet {
+            wallpaperService.setTextOverlayEnabled(wallpaperTextOverlay)
+        }
+    }
+
     /// Whether the floating overlay window is enabled (persisted via UserDefaults)
     @AppStorage("overlayEnabled") var overlayEnabled = false {
         didSet {
@@ -93,6 +101,8 @@ final class AppState: ObservableObject {
     init() {
         setupBindings()
         setupNotifications()
+        // Initialize wallpaper text overlay setting
+        wallpaperService.setTextOverlayEnabled(wallpaperTextOverlay)
     }
 
     /// Sets up Combine bindings for reactive updates
