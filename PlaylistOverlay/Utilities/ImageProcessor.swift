@@ -36,8 +36,10 @@ final class ImageProcessor {
             return nil
         }
 
-        // Composite the images
-        let composited = centeredArt.composited(over: blurredBackground)
+        // Composite over a solid black base to avoid any transparent edges
+        let blackBase = CIImage(color: .black).cropped(to: CGRect(origin: .zero, size: screenSize))
+        let backgroundOverBlack = blurredBackground.composited(over: blackBase)
+        let composited = centeredArt.composited(over: backgroundOverBlack)
 
         // Render to NSImage
         guard let outputCGImage = context.createCGImage(composited, from: CGRect(origin: .zero, size: screenSize)) else {
@@ -104,21 +106,19 @@ final class ImageProcessor {
 
     /// Applies rounded corners to an image
     private func applyRoundedCorners(to image: CIImage, radius: CGFloat) -> CIImage? {
-        let roundedRectGenerator = CIFilter.roundedRectangleGenerator()
-        roundedRectGenerator.extent = image.extent
-        roundedRectGenerator.radius = Float(radius)
-        roundedRectGenerator.color = CIColor.white
+        let rect = image.extent
+        let roundedRect = CIFilter.roundedRectangleGenerator()
+        roundedRect.extent = rect
+        roundedRect.radius = Float(radius)
+        roundedRect.color = CIColor(red: 1, green: 1, blue: 1, alpha: 1)
 
-        guard let mask = roundedRectGenerator.outputImage else {
-            return nil
-        }
+        guard let mask = roundedRect.outputImage else { return nil }
 
-        let blendFilter = CIFilter.blendWithMask()
-        blendFilter.inputImage = image
-        blendFilter.maskImage = mask
-        blendFilter.backgroundImage = CIImage.empty()
+        let masked = image.applyingFilter("CIBlendWithAlphaMask", parameters: [
+            kCIInputMaskImageKey: mask
+        ])
 
-        return blendFilter.outputImage
+        return masked
     }
 
     /// Adds a shadow effect to the image
@@ -142,8 +142,8 @@ final class ImageProcessor {
                 "inputAVector": CIVector(x: 0, y: 0, z: 0, w: 0.5)
             ])
 
-        // Composite image over shadow
-        return image.composited(over: offsetShadow)
+        let base = CIImage(color: .black).cropped(to: image.extent)
+        return image.composited(over: offsetShadow.composited(over: base))
     }
 
     /// Saves an NSImage to a file URL

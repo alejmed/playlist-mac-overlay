@@ -20,12 +20,8 @@ struct AlbumArtView: View {
                         .blur(radius: blurRadius)
                         .clipped()
                 } else {
-                    // Placeholder gradient background
-                    LinearGradient(
-                        gradient: Gradient(colors: [.purple, .blue, .cyan]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
+                    // Placeholder neutral background
+                    Color.black
                 }
 
                 // Dark overlay for better contrast
@@ -166,3 +162,4 @@ struct CompactAlbumArtView: View {
     )
     .frame(width: 800, height: 600)
 }
+
