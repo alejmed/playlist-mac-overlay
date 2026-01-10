@@ -11,6 +11,7 @@ struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @AppStorage("blurRadius") private var blurRadius: Double = 60
     @AppStorage("albumArtSize") private var albumArtSize: Double = 0.4
+    @AppStorage("transitionDuration") private var transitionDuration: Double = 0.8
 
     var body: some View {
         TabView {
@@ -88,6 +89,19 @@ struct SettingsView: View {
                     .onChange(of: albumArtSize) { newValue in
                         appState.wallpaperService.setAlbumArtSizeRatio(CGFloat(newValue))
                     }
+                }
+
+                VStack(alignment: .leading) {
+                    Text("Transition Speed: \(String(format: "%.1f", transitionDuration))s")
+                    Slider(value: $transitionDuration, in: 0.3...2.0, step: 0.1) {
+                        Text("Speed")
+                    }
+                    .onChange(of: transitionDuration) { newValue in
+                        appState.wallpaperService.setTransitionDuration(newValue)
+                    }
+                    Text("How long it takes to fade between wallpapers")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
         }

@@ -38,8 +38,14 @@ final class WallpaperService: ObservableObject {
     /// File manager for handling wallpaper file operations
     private let fileManager = FileManager.default
 
+    /// Transition service for smooth wallpaper changes
+    private let transitionService = TransitionService()
+
     /// Cache mapping track cache keys to generated wallpaper file URLs
     private var imageCache: [String: URL] = [:]
+
+    /// Whether to use smooth transitions (default: true)
+    var enableTransitions = true
 
     /// Directory for storing generated wallpapers in Application Support.
     ///
@@ -103,8 +109,9 @@ final class WallpaperService: ObservableObject {
 
         // Check cache first
         if let cachedURL = imageCache[track.cacheKey],
-           fileManager.fileExists(atPath: cachedURL.path) {
-            try await setWallpaper(url: cachedURL)
+           fileManager.fileExists(atPath: cachedURL.path),
+           let cachedImage = NSImage(contentsOf: cachedURL) {
+            try await setWallpaperWithTransition(url: cachedURL, image: cachedImage)
             return
         }
 
@@ -129,11 +136,30 @@ final class WallpaperService: ObservableObject {
         // Cache the URL
         imageCache[track.cacheKey] = fileURL
 
-        // Set the wallpaper
-        try await setWallpaper(url: fileURL)
+        // Set the wallpaper with smooth transition
+        try await setWallpaperWithTransition(url: fileURL, image: wallpaperImage)
 
         await MainActor.run {
             self.isActive = true
+        }
+    }
+
+    /// Sets the wallpaper with a smooth transition effect
+    private func setWallpaperWithTransition(url: URL, image: NSImage) async throws {
+        if enableTransitions {
+            // Start the visual transition overlay
+            async let transitionTask: Void = transitionService.performTransition(to: image)
+
+            // Update the actual wallpaper behind the transition
+            // Wait a bit for the transition to get going
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            try await setWallpaper(url: url)
+
+            // Wait for transition to complete
+            await transitionTask
+        } else {
+            // No transition, just set directly
+            try await setWallpaper(url: url)
         }
     }
 
@@ -197,6 +223,12 @@ final class WallpaperService: ObservableObject {
     func setAlbumArtSizeRatio(_ ratio: CGFloat) {
         imageProcessor.albumArtSizeRatio = ratio
         imageCache.removeAll()
+    }
+
+    /// Sets the transition duration for wallpaper changes
+    /// - Parameter duration: Duration in seconds (0.3 - 2.0)
+    func setTransitionDuration(_ duration: TimeInterval) {
+        transitionService.transitionDuration = min(max(duration, 0.3), 2.0)
     }
 
     // MARK: - Error Types
