@@ -30,6 +30,14 @@ struct MenuBarView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
 
+                // Text overlay toggle
+                Toggle(isOn: $appState.wallpaperTextOverlay) {
+                    Label("Show Song Info", systemImage: "text.bubble")
+                }
+                .toggleStyle(.switch)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+
                 // Overlay toggle
                 Toggle(isOn: $appState.overlayEnabled) {
                     Label("Show Overlay", systemImage: "rectangle.on.rectangle")
