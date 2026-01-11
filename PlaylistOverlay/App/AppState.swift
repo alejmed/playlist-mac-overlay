@@ -148,7 +148,11 @@ final class AppState: ObservableObject {
         // Update desktop overlay if enabled
         if wallpaperEnabled {
             print("🖼️ [AppState] Updating desktop overlay...")
-            desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
+            if desktopOverlayController.isVisible {
+                desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
+            } else {
+                desktopOverlayController.show(with: nowPlaying, showTextOverlay: wallpaperTextOverlay)
+            }
             print("✅ [AppState] Desktop overlay updated successfully!")
         } else {
             print("⏭️ [AppState] Desktop overlay disabled, skipping")
