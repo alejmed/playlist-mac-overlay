@@ -195,84 +195,85 @@ struct MediaControlsView: View {
         .background(
             LiquidGlassCapsule()
         )
-        .shadow(color: .black.opacity(0.4), radius: 25, x: 0, y: 12)
-        .shadow(color: .white.opacity(isHovered ? 0.15 : 0), radius: isHovered ? 20 : 0, x: 0, y: 0)
+        .shadow(color: .black.opacity(0.25), radius: 20, x: 0, y: 10)
+        .shadow(color: .white.opacity(isHovered ? 0.2 : 0), radius: isHovered ? 25 : 0, x: 0, y: 0)
         .scaleEffect(isHovered ? 1.04 : 1.0)
         .animation(.spring(response: 0.35, dampingFraction: 0.68), value: isHovered)
         .onHover { isHovered = $0 }
     }
 }
 
-/// Liquid glass capsule background
+/// Liquid glass capsule background with enhanced translucency
 struct LiquidGlassCapsule: View {
     var body: some View {
         ZStack {
-            // Base ultra-thin material
+            // Base ultra-thin material with reduced opacity for better blending
             Capsule()
                 .fill(.ultraThinMaterial)
+                .opacity(0.7)
 
-            // Liquid glass gradient overlay
+            // Subtle white highlight for glass reflection
             Capsule()
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.25),
-                            Color.white.opacity(0.05),
-                            Color.white.opacity(0.15)
+                            Color.white.opacity(0.15),
+                            Color.white.opacity(0.03),
+                            Color.white.opacity(0.08)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
-                .blendMode(.overlay)
+                .blendMode(.plusLighter)
 
-            // Dark tint for depth
+            // Very light tint for subtle depth (much more transparent)
             Capsule()
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.black.opacity(0.3),
-                            Color.black.opacity(0.5)
+                            Color.black.opacity(0.08),
+                            Color.black.opacity(0.15)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
 
-            // Shimmering border
+            // Delicate shimmering border
             Capsule()
                 .strokeBorder(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.35),
-                            Color.white.opacity(0.15),
-                            Color.white.opacity(0.25)
+                            Color.white.opacity(0.4),
+                            Color.white.opacity(0.2),
+                            Color.white.opacity(0.3)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 1.2
+                    lineWidth: 1.0
                 )
 
-            // Inner highlight for depth
+            // Subtle inner highlight
             Capsule()
-                .inset(by: 1.5)
+                .inset(by: 1.2)
                 .strokeBorder(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.15),
+                            Color.white.opacity(0.2),
                             Color.clear
                         ],
                         startPoint: .top,
                         endPoint: .center
                     ),
-                    lineWidth: 1
+                    lineWidth: 0.8
                 )
         }
     }
 }
 
-/// Individual liquid glass control button
+/// Individual liquid glass control button with enhanced translucency
 struct LiquidGlassButton: View {
     let systemName: String
     let size: CGFloat
@@ -287,7 +288,7 @@ struct LiquidGlassButton: View {
                     LinearGradient(
                         colors: [
                             Color.white.opacity(isHovered ? 1.0 : 0.95),
-                            Color.white.opacity(isHovered ? 0.95 : 0.85)
+                            Color.white.opacity(isHovered ? 0.95 : 0.9)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -296,24 +297,26 @@ struct LiquidGlassButton: View {
                 .frame(width: 44, height: 44)
                 .background(
                     ZStack {
-                        // Hover glow
+                        // Subtle hover glow that blends with background
                         if isHovered {
                             Circle()
                                 .fill(
                                     RadialGradient(
                                         colors: [
-                                            Color.white.opacity(0.2),
+                                            Color.white.opacity(0.25),
+                                            Color.white.opacity(0.1),
                                             Color.clear
                                         ],
                                         center: .center,
                                         startRadius: 0,
-                                        endRadius: 22
+                                        endRadius: 24
                                     )
                                 )
+                                .blendMode(.plusLighter)
                         }
                     }
                 )
-                .shadow(color: .black.opacity(isHovered ? 0.3 : 0.2), radius: 3, x: 0, y: 1)
+                .shadow(color: .black.opacity(isHovered ? 0.2 : 0.1), radius: 2, x: 0, y: 1)
                 .scaleEffect(isHovered ? 1.15 : 1.0)
         }
         .buttonStyle(.plain)
