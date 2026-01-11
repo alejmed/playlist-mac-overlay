@@ -22,9 +22,9 @@ struct MenuBarView: View {
 
             // Controls section
             VStack(spacing: 4) {
-                // Wallpaper toggle
+                // Desktop overlay toggle
                 Toggle(isOn: $appState.wallpaperEnabled) {
-                    Label("Update Wallpaper", systemImage: "photo.fill")
+                    Label("Desktop Background", systemImage: "photo.fill")
                 }
                 .toggleStyle(.switch)
                 .padding(.horizontal, 12)
@@ -38,9 +38,9 @@ struct MenuBarView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
 
-                // Overlay toggle
+                // Floating overlay toggle
                 Toggle(isOn: $appState.overlayEnabled) {
-                    Label("Show Overlay", systemImage: "rectangle.on.rectangle")
+                    Label("Floating Overlay", systemImage: "rectangle.on.rectangle")
                 }
                 .toggleStyle(.switch)
                 .padding(.horizontal, 12)

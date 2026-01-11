@@ -3,15 +3,12 @@ import SwiftUI
 /// Settings window view for configuring app preferences.
 ///
 /// Provides tabs for:
-/// - **General**: Enable/disable features, restore wallpaper, clear cache
-/// - **Appearance**: Adjust blur intensity and album art size
+/// - **General**: Enable/disable desktop and floating overlays
+/// - **Appearance**: Customize overlay appearance
 /// - **Sources**: Toggle Spotify and Apple Music detection
 /// - **About**: App information and GitHub link
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
-    @AppStorage("blurRadius") private var blurRadius: Double = 60
-    @AppStorage("albumArtSize") private var albumArtSize: Double = 0.4
-    @AppStorage("transitionDuration") private var transitionDuration: Double = 0.8
 
     var body: some View {
         TabView {
@@ -44,23 +41,11 @@ struct SettingsView: View {
     private var generalTab: some View {
         Form {
             Section {
-                Toggle("Update wallpaper automatically", isOn: $appState.wallpaperEnabled)
+                Toggle("Show desktop background overlay", isOn: $appState.wallpaperEnabled)
                 Toggle("Show floating overlay", isOn: $appState.overlayEnabled)
 
                 // Note: LaunchAtLogin requires the package to be added
                 // Toggle("Launch at login", isOn: LaunchAtLogin.$isEnabled)
-            }
-
-            Section {
-                Button("Restore Original Wallpaper") {
-                    Task {
-                        try? await appState.wallpaperService.restoreOriginalWallpaper()
-                    }
-                }
-
-                Button("Clear Image Cache") {
-                    appState.wallpaperService.clearCache()
-                }
             }
         }
         .formStyle(.grouped)
@@ -70,41 +55,12 @@ struct SettingsView: View {
 
     private var appearanceTab: some View {
         Form {
-            Section("Wallpaper Style") {
+            Section("Desktop Overlay Style") {
                 Toggle("Show song and artist text", isOn: $appState.wallpaperTextOverlay)
 
-                VStack(alignment: .leading) {
-                    Text("Blur Intensity: \(Int(blurRadius))")
-                    Slider(value: $blurRadius, in: 20...100, step: 5) {
-                        Text("Blur")
-                    }
-                    .onChange(of: blurRadius) { newValue in
-                        appState.wallpaperService.setBlurRadius(CGFloat(newValue))
-                    }
-                }
-
-                VStack(alignment: .leading) {
-                    Text("Album Art Size: \(Int(albumArtSize * 100))%")
-                    Slider(value: $albumArtSize, in: 0.2...0.7, step: 0.05) {
-                        Text("Size")
-                    }
-                    .onChange(of: albumArtSize) { newValue in
-                        appState.wallpaperService.setAlbumArtSizeRatio(CGFloat(newValue))
-                    }
-                }
-
-                VStack(alignment: .leading) {
-                    Text("Transition Speed: \(String(format: "%.1f", transitionDuration))s")
-                    Slider(value: $transitionDuration, in: 0.3...2.0, step: 0.1) {
-                        Text("Speed")
-                    }
-                    .onChange(of: transitionDuration) { newValue in
-                        appState.wallpaperService.setTransitionDuration(newValue)
-                    }
-                    Text("How long it takes to fade between wallpapers")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
+                Text("The desktop overlay displays album art with a blurred background behind all windows.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
         .formStyle(.grouped)
@@ -155,7 +111,7 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            Text("Dynamic album art wallpapers for macOS")
+            Text("Dynamic album art overlay for macOS")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

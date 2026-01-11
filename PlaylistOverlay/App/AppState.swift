@@ -34,33 +34,32 @@ final class AppState: ObservableObject {
     /// Service for detecting currently playing media from Spotify and Apple Music
     let mediaService = MediaDetectionService()
 
-    /// Service for generating and setting desktop wallpapers
-    let wallpaperService = WallpaperService()
+    /// Controller for managing the desktop overlay (replaces wallpaper service)
+    let desktopOverlayController = DesktopOverlayController()
 
     /// Controller for managing the floating overlay window
     let overlayController = OverlayWindowController()
 
     // MARK: - User Preferences
 
-    /// Whether wallpaper updates are enabled (persisted via UserDefaults)
+    /// Whether desktop overlay is enabled (persisted via UserDefaults)
     @AppStorage("wallpaperEnabled") var wallpaperEnabled = true {
         didSet {
-            if !wallpaperEnabled {
-                Task {
-                    try? await wallpaperService.restoreOriginalWallpaper()
+            if wallpaperEnabled {
+                if let nowPlaying = mediaService.currentlyPlaying {
+                    desktopOverlayController.show(with: nowPlaying, showTextOverlay: wallpaperTextOverlay)
                 }
+            } else {
+                desktopOverlayController.hide()
             }
         }
     }
 
-    /// Whether to show text overlay on wallpaper (persisted via UserDefaults)
+    /// Whether to show text overlay on desktop overlay (persisted via UserDefaults)
     @AppStorage("wallpaperTextOverlay") var wallpaperTextOverlay = false {
         didSet {
-            wallpaperService.setTextOverlayEnabled(wallpaperTextOverlay)
             if wallpaperEnabled, let nowPlaying = mediaService.currentlyPlaying {
-                Task {
-                    try? await wallpaperService.updateWallpaper(for: nowPlaying)
-                }
+                desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
             }
         }
     }
@@ -106,8 +105,6 @@ final class AppState: ObservableObject {
     init() {
         setupBindings()
         setupNotifications()
-        // Initialize wallpaper text overlay setting
-        wallpaperService.setTextOverlayEnabled(wallpaperTextOverlay)
     }
 
     /// Sets up Combine bindings for reactive updates
@@ -148,22 +145,18 @@ final class AppState: ObservableObject {
             return
         }
 
-        // Update wallpaper if enabled
+        // Update desktop overlay if enabled
         if wallpaperEnabled {
-            print("🖼️ [AppState] Attempting to update wallpaper...")
-            do {
-                try await wallpaperService.updateWallpaper(for: nowPlaying)
-                print("✅ [AppState] Wallpaper updated successfully!")
-            } catch {
-                print("❌ [AppState] Failed to update wallpaper: \(error)")
-            }
+            print("🖼️ [AppState] Updating desktop overlay...")
+            desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
+            print("✅ [AppState] Desktop overlay updated successfully!")
         } else {
-            print("⏭️ [AppState] Wallpaper disabled, skipping")
+            print("⏭️ [AppState] Desktop overlay disabled, skipping")
         }
 
-        // Update overlay if visible
+        // Update floating overlay if visible
         if overlayEnabled {
-            print("📺 [AppState] Updating overlay...")
+            print("📺 [AppState] Updating floating overlay...")
             overlayController.updateContent(nowPlaying)
         }
     }
