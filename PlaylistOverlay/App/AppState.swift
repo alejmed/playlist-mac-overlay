@@ -47,7 +47,15 @@ final class AppState: ObservableObject {
         didSet {
             if wallpaperEnabled {
                 if let nowPlaying = mediaService.currentlyPlaying {
-                    desktopOverlayController.show(with: nowPlaying, showTextOverlay: wallpaperTextOverlay)
+                    let actions = controlActions()
+                    desktopOverlayController.show(
+                        with: nowPlaying,
+                        showTextOverlay: wallpaperTextOverlay,
+                        showMediaControls: wallpaperMediaControls,
+                        onPrevious: actions.onPrevious,
+                        onPlayPause: actions.onPlayPause,
+                        onNext: actions.onNext
+                    )
                 }
             } else {
                 desktopOverlayController.hide()
@@ -59,7 +67,32 @@ final class AppState: ObservableObject {
     @AppStorage("wallpaperTextOverlay") var wallpaperTextOverlay = false {
         didSet {
             if wallpaperEnabled, let nowPlaying = mediaService.currentlyPlaying {
-                desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
+                let actions = controlActions()
+                desktopOverlayController.updateContent(
+                    nowPlaying,
+                    showTextOverlay: wallpaperTextOverlay,
+                    showMediaControls: wallpaperMediaControls,
+                    onPrevious: actions.onPrevious,
+                    onPlayPause: actions.onPlayPause,
+                    onNext: actions.onNext
+                )
+            }
+        }
+    }
+
+    /// Whether to show media controls on desktop overlay (persisted via UserDefaults)
+    @AppStorage("wallpaperMediaControls") var wallpaperMediaControls = false {
+        didSet {
+            if wallpaperEnabled, let nowPlaying = mediaService.currentlyPlaying {
+                let actions = controlActions()
+                desktopOverlayController.updateContent(
+                    nowPlaying,
+                    showTextOverlay: wallpaperTextOverlay,
+                    showMediaControls: wallpaperMediaControls,
+                    onPrevious: actions.onPrevious,
+                    onPlayPause: actions.onPlayPause,
+                    onNext: actions.onNext
+                )
             }
         }
     }
@@ -99,6 +132,20 @@ final class AppState: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
     private var settingsWindow: NSWindow?
+
+    private func controlActions() -> (onPrevious: () -> Void, onPlayPause: () -> Void, onNext: () -> Void) {
+        (
+            { [weak self] in
+                Task { await self?.previousTrack() }
+            },
+            { [weak self] in
+                Task { await self?.togglePlayPause() }
+            },
+            { [weak self] in
+                Task { await self?.nextTrack() }
+            }
+        )
+    }
 
     // MARK: - Initialization
 
@@ -148,10 +195,25 @@ final class AppState: ObservableObject {
         // Update desktop overlay if enabled
         if wallpaperEnabled {
             print("🖼️ [AppState] Updating desktop overlay...")
+            let actions = controlActions()
             if desktopOverlayController.isVisible {
-                desktopOverlayController.updateContent(nowPlaying, showTextOverlay: wallpaperTextOverlay)
+                desktopOverlayController.updateContent(
+                    nowPlaying,
+                    showTextOverlay: wallpaperTextOverlay,
+                    showMediaControls: wallpaperMediaControls,
+                    onPrevious: actions.onPrevious,
+                    onPlayPause: actions.onPlayPause,
+                    onNext: actions.onNext
+                )
             } else {
-                desktopOverlayController.show(with: nowPlaying, showTextOverlay: wallpaperTextOverlay)
+                desktopOverlayController.show(
+                    with: nowPlaying,
+                    showTextOverlay: wallpaperTextOverlay,
+                    showMediaControls: wallpaperMediaControls,
+                    onPrevious: actions.onPrevious,
+                    onPlayPause: actions.onPlayPause,
+                    onNext: actions.onNext
+                )
             }
             print("✅ [AppState] Desktop overlay updated successfully!")
         } else {
@@ -162,6 +224,54 @@ final class AppState: ObservableObject {
         if overlayEnabled {
             print("📺 [AppState] Updating floating overlay...")
             overlayController.updateContent(nowPlaying)
+        }
+    }
+
+    /// Toggles play/pause for the current music source
+    func togglePlayPause() async {
+        guard let nowPlaying = mediaService.currentlyPlaying else { return }
+        
+        do {
+            switch nowPlaying.source {
+            case .spotify:
+                try await AppleScriptRunner.spotifyPlayPause()
+            case .appleMusic:
+                try await AppleScriptRunner.appleMusicPlayPause()
+            }
+        } catch {
+            print("Failed to toggle play/pause: \(error)")
+        }
+    }
+
+    /// Goes to previous track for the current music source
+    func previousTrack() async {
+        guard let nowPlaying = mediaService.currentlyPlaying else { return }
+        
+        do {
+            switch nowPlaying.source {
+            case .spotify:
+                try await AppleScriptRunner.spotifyPrevious()
+            case .appleMusic:
+                try await AppleScriptRunner.appleMusicPrevious()
+            }
+        } catch {
+            print("Failed to go to previous track: \(error)")
+        }
+    }
+
+    /// Goes to next track for the current music source
+    func nextTrack() async {
+        guard let nowPlaying = mediaService.currentlyPlaying else { return }
+        
+        do {
+            switch nowPlaying.source {
+            case .spotify:
+                try await AppleScriptRunner.spotifyNext()
+            case .appleMusic:
+                try await AppleScriptRunner.appleMusicNext()
+            }
+        } catch {
+            print("Failed to go to next track: \(error)")
         }
     }
 

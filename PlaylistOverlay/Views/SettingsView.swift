@@ -57,6 +57,8 @@ struct SettingsView: View {
         Form {
             Section("Desktop Overlay Style") {
                 Toggle("Show song and artist text", isOn: $appState.wallpaperTextOverlay)
+                
+                Toggle("Show media controls", isOn: $appState.wallpaperMediaControls)
 
                 Text("The desktop overlay displays album art with a blurred background behind all windows.")
                     .font(.caption)

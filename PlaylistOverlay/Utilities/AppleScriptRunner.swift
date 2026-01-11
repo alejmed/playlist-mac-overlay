@@ -86,10 +86,71 @@ final class AppleScriptRunner {
         }
     }
 
+    /// Executes an AppleScript without requiring a return value
+    static func executeVoid(_ script: String) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                var error: NSDictionary?
+                guard let appleScript = NSAppleScript(source: script) else {
+                    continuation.resume(throwing: AppleScriptError.scriptCreationFailed)
+                    return
+                }
+
+                _ = appleScript.executeAndReturnError(&error)
+
+                if let error = error {
+                    let message = error[NSAppleScript.errorMessage] as? String ?? "Unknown error"
+                    continuation.resume(throwing: AppleScriptError.executionFailed(message))
+                    return
+                }
+
+                continuation.resume(returning: ())
+            }
+        }
+    }
+
     /// Checks if an application is running
     static func isAppRunning(bundleId: String) -> Bool {
         NSWorkspace.shared.runningApplications.contains { app in
             app.bundleIdentifier == bundleId
         }
+    }
+
+    // MARK: - Media Control Methods
+
+    /// Executes play/pause command for Spotify
+    static func spotifyPlayPause() async throws {
+        let script = "tell application \"Spotify\" to playpause"
+        try await executeVoid(script)
+    }
+
+    /// Executes previous track command for Spotify
+    static func spotifyPrevious() async throws {
+        let script = "tell application \"Spotify\" to previous track"
+        try await executeVoid(script)
+    }
+
+    /// Executes next track command for Spotify
+    static func spotifyNext() async throws {
+        let script = "tell application \"Spotify\" to next track"
+        try await executeVoid(script)
+    }
+
+    /// Executes play/pause command for Apple Music
+    static func appleMusicPlayPause() async throws {
+        let script = "tell application \"Music\" to playpause"
+        try await executeVoid(script)
+    }
+
+    /// Executes previous track command for Apple Music
+    static func appleMusicPrevious() async throws {
+        let script = "tell application \"Music\" to previous track"
+        try await executeVoid(script)
+    }
+
+    /// Executes next track command for Apple Music
+    static func appleMusicNext() async throws {
+        let script = "tell application \"Music\" to next track"
+        try await executeVoid(script)
     }
 }

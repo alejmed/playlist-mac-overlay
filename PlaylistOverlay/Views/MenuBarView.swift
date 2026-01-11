@@ -38,6 +38,14 @@ struct MenuBarView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
 
+                // Media controls toggle
+                Toggle(isOn: $appState.wallpaperMediaControls) {
+                    Label("Show Media Controls", systemImage: "play.circle")
+                }
+                .toggleStyle(.switch)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+
 
             }
 
