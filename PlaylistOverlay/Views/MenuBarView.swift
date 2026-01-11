@@ -38,13 +38,7 @@ struct MenuBarView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
 
-                // Floating overlay toggle
-                Toggle(isOn: $appState.overlayEnabled) {
-                    Label("Floating Overlay", systemImage: "rectangle.on.rectangle")
-                }
-                .toggleStyle(.switch)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
+
             }
 
             Divider()
