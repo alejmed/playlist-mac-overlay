@@ -241,7 +241,7 @@ final class AppState: ObservableObject {
             }
 
             // Manually refresh state after a short delay to update UI immediately
-            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
             await mediaService.refreshAll()
         } catch {
             print("Failed to toggle play/pause: \(error)")
@@ -261,7 +261,7 @@ final class AppState: ObservableObject {
             }
 
             // Manually refresh state after a short delay to update UI immediately
-            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
             await mediaService.refreshAll()
         } catch {
             print("Failed to go to previous track: \(error)")
@@ -281,7 +281,7 @@ final class AppState: ObservableObject {
             }
 
             // Manually refresh state after a short delay to update UI immediately
-            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
             await mediaService.refreshAll()
         } catch {
             print("Failed to go to next track: \(error)")
