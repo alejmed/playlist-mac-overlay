@@ -75,7 +75,16 @@ class DesktopOverlayWindow: NSWindow {
             )
         )
         self.contentView = contentView
-        self.ignoresMouseEvents = !showMediaControls
+
+        // When controls are shown, raise window level to allow interaction
+        // When controls are hidden, return to desktop level
+        if showMediaControls {
+            self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)) + 2)
+            self.ignoresMouseEvents = false
+        } else {
+            self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)) + 1)
+            self.ignoresMouseEvents = true
+        }
     }
 
     /// Shows the overlay
