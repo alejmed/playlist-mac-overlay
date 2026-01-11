@@ -12,10 +12,13 @@ import SwiftUI
 class DesktopOverlayWindow: NSWindow {
 
     init() {
+        // Get main screen frame first
+        let screenFrame = NSScreen.main?.frame ?? .zero
+
         // Create a borderless, fullscreen window
         super.init(
-            contentRect: .zero,
-            styleMask: [.borderless, .fullSizeContentView],
+            contentRect: screenFrame,
+            styleMask: [.borderless],
             backing: .buffered,
             defer: false
         )
@@ -35,22 +38,13 @@ class DesktopOverlayWindow: NSWindow {
         // Don't show in window lists or Cmd+Tab
         self.isExcludedFromWindowsMenu = true
 
-        // Cover all screens
-        setupForAllScreens()
+        // Ensure frame covers entire screen
+        self.setFrame(screenFrame, display: true, animate: false)
     }
 
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 
-    /// Positions the window to cover all connected displays
-    private func setupForAllScreens() {
-        guard let mainScreen = NSScreen.main else { return }
-
-        // For now, just cover the main screen
-        // Future enhancement: create multiple windows for multi-display
-        let screenFrame = mainScreen.frame
-        self.setFrame(screenFrame, display: true)
-    }
 
     /// Updates the overlay with new track information
     func updateContent(with nowPlaying: NowPlaying, showTextOverlay: Bool) {
@@ -80,18 +74,13 @@ struct DesktopOverlayContentView: View {
     let showTextOverlay: Bool
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Use the existing AlbumArtView which already handles blurred backgrounds
-                AlbumArtView(
-                    nowPlaying: nowPlaying,
-                    showTrackInfo: showTextOverlay,
-                    blurRadius: 30
-                )
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height)
-        }
-        .ignoresSafeArea()
+        AlbumArtView(
+            nowPlaying: nowPlaying,
+            showTrackInfo: showTextOverlay,
+            blurRadius: 30
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(.all)
     }
 }
 
