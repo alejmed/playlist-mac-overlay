@@ -187,8 +187,9 @@ final class AppState: ObservableObject {
         print("   - wallpaperEnabled: \(wallpaperEnabled)")
         print("   - hasArtwork: \(nowPlaying?.artworkImage != nil)")
 
-        guard let nowPlaying = nowPlaying, nowPlaying.isPlaying else {
-            print("⚠️ [AppState] Not playing or nil, skipping update")
+        // Update as long as we have track info, regardless of play/pause state
+        guard let nowPlaying = nowPlaying else {
+            print("⚠️ [AppState] No track info, skipping update")
             return
         }
 
