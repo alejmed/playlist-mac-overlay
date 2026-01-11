@@ -384,6 +384,43 @@ After implementing changes, verify:
 
 **Don't merge until user confirms all issues resolved**
 
+### Building and Deploying the App
+
+For rapid iteration and testing, use this workflow:
+
+**Quick Build, Deploy, and Launch:**
+```bash
+# Build the app
+./build.sh
+
+# Deploy to Applications and launch (single command)
+cp -R "build/Build/Products/Debug/Playlist Overlay.app" "/Applications/" && \
+killall "Playlist Overlay" 2>/dev/null; \
+sleep 1; \
+open "/Applications/Playlist Overlay.app"
+```
+
+**What this does:**
+1. Copies the built app to `/Applications/` (overwrites existing)
+2. Kills any currently running instance
+3. Waits 1 second for clean shutdown
+4. Launches the new version
+
+**Alternative: All in one command**
+```bash
+./build.sh && \
+cp -R "build/Build/Products/Debug/Playlist Overlay.app" "/Applications/" && \
+killall "Playlist Overlay" 2>/dev/null; \
+sleep 1; \
+open "/Applications/Playlist Overlay.app"
+```
+
+**Tips:**
+- The `2>/dev/null` suppresses error if app isn't running
+- Always wait 1 second between kill and launch for clean state
+- Build output location: `build/Build/Products/Debug/Playlist Overlay.app`
+- Test immediately after launching to verify changes
+
 ---
 
 ## Project-Specific Notes
@@ -561,3 +598,25 @@ Follow these patterns and you'll contribute high-quality, maintainable code to t
 - Keep menu bar changes isolated to `MenuBarView.swift` unless the request explicitly targets Settings.
 - Always switch back to the feature branch before committing when a merge attempt surfaces unstaged changes on `master`.
 - Build output may include system tool warnings (e.g., `actool`, `appintentsmetadataprocessor`) even when the build succeeds.
+
+### Desktop Overlay Window Interaction
+- Desktop-level windows (at `desktopWindow + 1` level) cannot receive mouse events, even with `ignoresMouseEvents = false`
+- For interactive controls on desktop overlay, must dynamically adjust window level to at least `normalWindow - 1`
+- Window must have `canBecomeKey = true` to receive mouse events - implement dynamically based on controls visibility
+- Must call `makeKey()` and `orderFront()` explicitly when enabling controls
+- Remove `.ignoresCycle` from collection behavior when controls are shown
+
+### State Updates and Media Controls
+- Never block overlay updates based on `isPlaying` state - overlay must update when both playing AND paused
+- After executing media control actions (play/pause, next, previous), manually trigger `refreshAll()`:
+  - Spotify notifications can be delayed (100-500ms)
+  - Apple Music has no notifications, only polls every 2-3 seconds
+  - Use 50ms delay before refresh for optimal responsiveness
+- Always update UI state regardless of play/pause status to keep icons in sync
+
+### Liquid Glass UI Design
+- For true liquid glass effect, reduce material opacity to 0.6-0.8 to let background colors pass through
+- Use `.plusLighter` blend mode for highlight layers to blend naturally with background
+- Keep dark overlays very light (0.08-0.15 opacity) to maintain translucency
+- Reduce shadow opacity and use softer blurs for ethereal appearance
+- Multiple thin gradient layers create more realistic glass depth than single heavy overlays
