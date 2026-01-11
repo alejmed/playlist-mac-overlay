@@ -127,7 +127,7 @@ struct DesktopOverlayContentView: View {
     }
 }
 
-/// Enhanced media controls view for desktop overlay with modern design
+/// Liquid glass media controls with minimalist design
 struct MediaControlsView: View {
     let nowPlaying: NowPlaying
     let onPrevious: () -> Void
@@ -138,185 +138,176 @@ struct MediaControlsView: View {
     @State private var hoveredButton: String? = nil
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Track info section
-            VStack(spacing: 6) {
-                Text(nowPlaying.title)
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.white, .white.opacity(0.95)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .lineLimit(1)
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-
-                Text(nowPlaying.artist)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundColor(.white.opacity(0.85))
-                    .lineLimit(1)
-                    .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 1)
+        HStack(spacing: 20) {
+            // Previous button
+            LiquidGlassButton(
+                systemName: "backward.fill",
+                size: 20,
+                isHovered: hoveredButton == "previous"
+            ) {
+                onPrevious()
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 20)
-
-            // Control buttons
-            HStack(spacing: 24) {
-                // Previous button
-                ControlButton(
-                    systemName: "backward.fill",
-                    size: 22,
-                    isHovered: hoveredButton == "previous",
-                    isPrimary: false
-                ) {
-                    onPrevious()
-                }
-                .onHover { hovering in
+            .onHover { hovering in
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
                     hoveredButton = hovering ? "previous" : nil
                 }
+            }
 
-                // Play/Pause button (larger, primary)
-                ControlButton(
-                    systemName: nowPlaying.isPlaying ? "pause.fill" : "play.fill",
-                    size: 28,
-                    isHovered: hoveredButton == "play",
-                    isPrimary: true
-                ) {
-                    onPlayPause()
-                }
-                .onHover { hovering in
+            // Play/Pause button (larger)
+            LiquidGlassButton(
+                systemName: nowPlaying.isPlaying ? "pause.fill" : "play.fill",
+                size: 26,
+                isHovered: hoveredButton == "play"
+            ) {
+                onPlayPause()
+            }
+            .onHover { hovering in
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
                     hoveredButton = hovering ? "play" : nil
                 }
+            }
 
-                // Next button
-                ControlButton(
-                    systemName: "forward.fill",
-                    size: 22,
-                    isHovered: hoveredButton == "next",
-                    isPrimary: false
-                ) {
-                    onNext()
-                }
-                .onHover { hovering in
+            // Next button
+            LiquidGlassButton(
+                systemName: "forward.fill",
+                size: 20,
+                isHovered: hoveredButton == "next"
+            ) {
+                onNext()
+            }
+            .onHover { hovering in
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
                     hoveredButton = hovering ? "next" : nil
                 }
             }
-            .padding(.bottom, 20)
         }
-        .frame(minWidth: 320)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 14)
         .background(
-            ZStack {
-                // Glassmorphism background with blur
-                RoundedRectangle(cornerRadius: 28)
-                    .fill(.ultraThinMaterial)
-                    .opacity(0.9)
-
-                // Dark overlay for contrast
-                RoundedRectangle(cornerRadius: 28)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.black.opacity(0.5),
-                                Color.black.opacity(0.7)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-
-                // Subtle gradient overlay
-                RoundedRectangle(cornerRadius: 28)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.3),
-                                Color.white.opacity(0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1.5
-                    )
-            }
+            LiquidGlassCapsule()
         )
-        .shadow(color: .black.opacity(0.5), radius: 30, x: 0, y: 15)
-        .scaleEffect(isHovered ? 1.02 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovered)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: hoveredButton)
+        .shadow(color: .black.opacity(0.4), radius: 25, x: 0, y: 12)
+        .shadow(color: .white.opacity(isHovered ? 0.15 : 0), radius: isHovered ? 20 : 0, x: 0, y: 0)
+        .scaleEffect(isHovered ? 1.04 : 1.0)
+        .animation(.spring(response: 0.35, dampingFraction: 0.68), value: isHovered)
         .onHover { isHovered = $0 }
     }
 }
 
-/// Individual control button with hover effects
-struct ControlButton: View {
+/// Liquid glass capsule background
+struct LiquidGlassCapsule: View {
+    var body: some View {
+        ZStack {
+            // Base ultra-thin material
+            Capsule()
+                .fill(.ultraThinMaterial)
+
+            // Liquid glass gradient overlay
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.25),
+                            Color.white.opacity(0.05),
+                            Color.white.opacity(0.15)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .blendMode(.overlay)
+
+            // Dark tint for depth
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(0.3),
+                            Color.black.opacity(0.5)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+
+            // Shimmering border
+            Capsule()
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.35),
+                            Color.white.opacity(0.15),
+                            Color.white.opacity(0.25)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1.2
+                )
+
+            // Inner highlight for depth
+            Capsule()
+                .inset(by: 1.5)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.15),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .center
+                    ),
+                    lineWidth: 1
+                )
+        }
+    }
+}
+
+/// Individual liquid glass control button
+struct LiquidGlassButton: View {
     let systemName: String
     let size: CGFloat
     let isHovered: Bool
-    let isPrimary: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            ZStack {
-                // Background circle
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: isPrimary ? [
-                                Color.white.opacity(isHovered ? 0.3 : 0.2),
-                                Color.white.opacity(isHovered ? 0.2 : 0.1)
-                            ] : [
-                                Color.white.opacity(isHovered ? 0.2 : 0.1),
-                                Color.white.opacity(isHovered ? 0.1 : 0.05)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+            Image(systemName: systemName)
+                .font(.system(size: size, weight: .semibold))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(isHovered ? 1.0 : 0.95),
+                            Color.white.opacity(isHovered ? 0.95 : 0.85)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
-                    .frame(width: isPrimary ? 70 : 56, height: isPrimary ? 70 : 56)
-
-                // Border
-                Circle()
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(isHovered ? 0.4 : 0.2),
-                                Color.white.opacity(isHovered ? 0.2 : 0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: isHovered ? 2 : 1.5
-                    )
-                    .frame(width: isPrimary ? 70 : 56, height: isPrimary ? 70 : 56)
-
-                // Icon
-                Image(systemName: systemName)
-                    .font(.system(size: size, weight: .semibold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [
-                                Color.white,
-                                Color.white.opacity(0.95)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-            }
-            .scaleEffect(isHovered ? 1.1 : 1.0)
-            .shadow(
-                color: isPrimary ? Color.white.opacity(isHovered ? 0.3 : 0) : .clear,
-                radius: isHovered ? 15 : 0,
-                x: 0,
-                y: 0
-            )
+                )
+                .frame(width: 44, height: 44)
+                .background(
+                    ZStack {
+                        // Hover glow
+                        if isHovered {
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [
+                                            Color.white.opacity(0.2),
+                                            Color.clear
+                                        ],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 22
+                                    )
+                                )
+                        }
+                    }
+                )
+                .shadow(color: .black.opacity(isHovered ? 0.3 : 0.2), radius: 3, x: 0, y: 1)
+                .scaleEffect(isHovered ? 1.15 : 1.0)
         }
         .buttonStyle(.plain)
-        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHovered)
     }
 }
 
