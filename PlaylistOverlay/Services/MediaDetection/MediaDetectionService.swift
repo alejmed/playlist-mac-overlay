@@ -15,6 +15,11 @@ final class MediaDetectionService: ObservableObject {
 
     init() {
         setupBindings()
+
+        // Refresh all detectors on startup to catch already-playing tracks
+        Task {
+            await refreshAll()
+        }
     }
 
     /// Sets up Combine bindings to merge detection sources

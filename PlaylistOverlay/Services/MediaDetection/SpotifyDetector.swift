@@ -39,6 +39,13 @@ final class SpotifyDetector: ObservableObject {
     init() {
         setupNotificationListener()
         checkIfSpotifyRunning()
+
+        // Refresh on startup to catch already-playing tracks
+        if isRunning {
+            Task {
+                await refresh()
+            }
+        }
     }
 
     // MARK: - Private Methods
