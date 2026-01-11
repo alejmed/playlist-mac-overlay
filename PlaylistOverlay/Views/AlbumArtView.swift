@@ -18,7 +18,7 @@ struct AlbumArtView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .blur(radius: blurRadius)
-                        .clipped()
+                        .scaleEffect(1.1) // Scale up to ensure full coverage
                 } else {
                     // Placeholder neutral background
                     Color.black
