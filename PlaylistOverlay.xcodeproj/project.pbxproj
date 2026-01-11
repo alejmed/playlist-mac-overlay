@@ -17,11 +17,11 @@
 		78D20A61B33B92F61E5AAFEB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571D469F1DE405EEBFFFB333 /* SettingsView.swift */; };
 		83B79ACA2A1BAA8DFE5F0F17 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10593BA7BD5D776F2D272CB2 /* MenuBarView.swift */; };
 		9E81D91A3ED7788A41CC2764 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA69A703B7B22D761AB4A863 /* ImageProcessor.swift */; };
-		A99EE122B7349DCE9AA2B000 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */; };
 		B75EA91F3B434540A7C8C265 /* AppleMusicDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E12B98D8EFBDE261EE9377B /* AppleMusicDetector.swift */; };
 		C549C850B93C86FD842FD558 /* AlbumArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AA35CDC5F384316E4418D2 /* AlbumArtView.swift */; };
 		CB7D19403FC44950DDF40E7D /* PlayerSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5ABCB1D74BE76E92A4F121 /* PlayerSource.swift */; };
 		CEDDA4444070A2AB8E17DEEA /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B4ABFAA6DD62EE3346E9C /* NowPlaying.swift */; };
+		D137472DD5BD2D82CCF71D31 /* DesktopOverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F35B8566257F87929F549F3 /* DesktopOverlayWindow.swift */; };
 		F405C6A383841F481E8BFC34 /* AppleScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FE320916C2B1797DB62C9E /* AppleScriptRunner.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,8 +33,8 @@
 		2D3837B7185FD8658FE9841E /* WallpaperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperService.swift; sourceTree = "<group>"; };
 		334AD286F6AF934D2796D656 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		44E3B053380E324D228AC0DB /* PlaylistOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaylistOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		571D469F1DE405EEBFFFB333 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6F35B8566257F87929F549F3 /* DesktopOverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopOverlayWindow.swift; sourceTree = "<group>"; };
 		8E12B98D8EFBDE261EE9377B /* AppleMusicDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicDetector.swift; sourceTree = "<group>"; };
 		95DA511FE1684B38B5AD591E /* PlaylistOverlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistOverlayApp.swift; sourceTree = "<group>"; };
 		A0B7F478E7AE7B05DC701362 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -70,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				C3AA35CDC5F384316E4418D2 /* AlbumArtView.swift */,
+				6F35B8566257F87929F549F3 /* DesktopOverlayWindow.swift */,
 				10593BA7BD5D776F2D272CB2 /* MenuBarView.swift */,
 				254C19BAC0B32B6DF138353F /* OverlayWindow.swift */,
 				571D469F1DE405EEBFFFB333 /* SettingsView.swift */,
@@ -130,7 +131,6 @@
 		EC9DCCBD586078085CF90CEC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4629E837FC2DB4B2AEF811F3 /* Assets.xcassets */,
 				A0B7F478E7AE7B05DC701362 /* Info.plist */,
 				A41AB54DDF52740265E59CB0 /* PlaylistOverlay.entitlements */,
 			);
@@ -153,7 +153,6 @@
 			buildConfigurationList = 5A8DA75033673EE3FE749D43 /* Build configuration list for PBXNativeTarget "PlaylistOverlay" */;
 			buildPhases = (
 				C9510A400050B8AF97AEC399 /* Sources */,
-				DA87FAC85C033B5071088F04 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -200,17 +199,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		DA87FAC85C033B5071088F04 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A99EE122B7349DCE9AA2B000 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		C9510A400050B8AF97AEC399 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -220,6 +208,7 @@
 				3F2C6CD4092FBB1538BF083C /* AppState.swift in Sources */,
 				B75EA91F3B434540A7C8C265 /* AppleMusicDetector.swift in Sources */,
 				F405C6A383841F481E8BFC34 /* AppleScriptRunner.swift in Sources */,
+				D137472DD5BD2D82CCF71D31 /* DesktopOverlayWindow.swift in Sources */,
 				9E81D91A3ED7788A41CC2764 /* ImageProcessor.swift in Sources */,
 				6A2E3F5B03B5237B1C694B0D /* MediaDetectionService.swift in Sources */,
 				83B79ACA2A1BAA8DFE5F0F17 /* MenuBarView.swift in Sources */,
