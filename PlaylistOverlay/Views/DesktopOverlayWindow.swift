@@ -127,52 +127,196 @@ struct DesktopOverlayContentView: View {
     }
 }
 
-/// Minimal media controls view for desktop overlay
+/// Enhanced media controls view for desktop overlay with modern design
 struct MediaControlsView: View {
     let nowPlaying: NowPlaying
     let onPrevious: () -> Void
     let onPlayPause: () -> Void
     let onNext: () -> Void
-    
+
     @State private var isHovered = false
+    @State private var hoveredButton: String? = nil
 
     var body: some View {
-        HStack(spacing: 16) {
-            Button(action: onPrevious) {
-                Image(systemName: "backward.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.white.opacity(0.9))
+        VStack(spacing: 16) {
+            // Track info section
+            VStack(spacing: 6) {
+                Text(nowPlaying.title)
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, .white.opacity(0.95)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .lineLimit(1)
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+
+                Text(nowPlaying.artist)
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundColor(.white.opacity(0.85))
+                    .lineLimit(1)
+                    .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 1)
             }
-            .buttonStyle(.plain)
-            
-            Button(action: onPlayPause) {
-                Image(systemName: nowPlaying.isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+
+            // Control buttons
+            HStack(spacing: 24) {
+                // Previous button
+                ControlButton(
+                    systemName: "backward.fill",
+                    size: 22,
+                    isHovered: hoveredButton == "previous",
+                    isPrimary: false
+                ) {
+                    onPrevious()
+                }
+                .onHover { hovering in
+                    hoveredButton = hovering ? "previous" : nil
+                }
+
+                // Play/Pause button (larger, primary)
+                ControlButton(
+                    systemName: nowPlaying.isPlaying ? "pause.fill" : "play.fill",
+                    size: 28,
+                    isHovered: hoveredButton == "play",
+                    isPrimary: true
+                ) {
+                    onPlayPause()
+                }
+                .onHover { hovering in
+                    hoveredButton = hovering ? "play" : nil
+                }
+
+                // Next button
+                ControlButton(
+                    systemName: "forward.fill",
+                    size: 22,
+                    isHovered: hoveredButton == "next",
+                    isPrimary: false
+                ) {
+                    onNext()
+                }
+                .onHover { hovering in
+                    hoveredButton = hovering ? "next" : nil
+                }
             }
-            .buttonStyle(.plain)
-            
-            Button(action: onNext) {
-                Image(systemName: "forward.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.white.opacity(0.9))
-            }
-            .buttonStyle(.plain)
+            .padding(.bottom, 20)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
+        .frame(minWidth: 320)
         .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.black.opacity(0.4))
-                .background(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(.white.opacity(0.2), lineWidth: 1)
-                )
+            ZStack {
+                // Glassmorphism background with blur
+                RoundedRectangle(cornerRadius: 28)
+                    .fill(.ultraThinMaterial)
+                    .opacity(0.9)
+
+                // Dark overlay for contrast
+                RoundedRectangle(cornerRadius: 28)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.black.opacity(0.5),
+                                Color.black.opacity(0.7)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+
+                // Subtle gradient overlay
+                RoundedRectangle(cornerRadius: 28)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.3),
+                                Color.white.opacity(0.1)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.5
+                    )
+            }
         )
-        .scaleEffect(isHovered ? 1.05 : 1.0)
-        .opacity(isHovered ? 1.0 : 0.8)
-        .animation(.easeInOut(duration: 0.2), value: isHovered)
+        .shadow(color: .black.opacity(0.5), radius: 30, x: 0, y: 15)
+        .scaleEffect(isHovered ? 1.02 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovered)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: hoveredButton)
         .onHover { isHovered = $0 }
+    }
+}
+
+/// Individual control button with hover effects
+struct ControlButton: View {
+    let systemName: String
+    let size: CGFloat
+    let isHovered: Bool
+    let isPrimary: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                // Background circle
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: isPrimary ? [
+                                Color.white.opacity(isHovered ? 0.3 : 0.2),
+                                Color.white.opacity(isHovered ? 0.2 : 0.1)
+                            ] : [
+                                Color.white.opacity(isHovered ? 0.2 : 0.1),
+                                Color.white.opacity(isHovered ? 0.1 : 0.05)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: isPrimary ? 70 : 56, height: isPrimary ? 70 : 56)
+
+                // Border
+                Circle()
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(isHovered ? 0.4 : 0.2),
+                                Color.white.opacity(isHovered ? 0.2 : 0.1)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: isHovered ? 2 : 1.5
+                    )
+                    .frame(width: isPrimary ? 70 : 56, height: isPrimary ? 70 : 56)
+
+                // Icon
+                Image(systemName: systemName)
+                    .font(.system(size: size, weight: .semibold))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [
+                                Color.white,
+                                Color.white.opacity(0.95)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+            }
+            .scaleEffect(isHovered ? 1.1 : 1.0)
+            .shadow(
+                color: isPrimary ? Color.white.opacity(isHovered ? 0.3 : 0) : .clear,
+                radius: isHovered ? 15 : 0,
+                x: 0,
+                y: 0
+            )
+        }
+        .buttonStyle(.plain)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHovered)
     }
 }
 
