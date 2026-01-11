@@ -11,6 +11,8 @@ import SwiftUI
 /// - Does NOT modify the actual wallpaper
 class DesktopOverlayWindow: NSWindow {
 
+    private var controlsEnabled = false
+
     init() {
         // Get main screen frame first
         let screenFrame = NSScreen.main?.frame ?? .zero
@@ -42,7 +44,7 @@ class DesktopOverlayWindow: NSWindow {
         self.setFrame(screenFrame, display: true, animate: false)
     }
 
-    override var canBecomeKey: Bool { false }
+    override var canBecomeKey: Bool { controlsEnabled }
     override var canBecomeMain: Bool { false }
 
 
@@ -76,13 +78,22 @@ class DesktopOverlayWindow: NSWindow {
         )
         self.contentView = contentView
 
-        // When controls are shown, raise window level to allow interaction
+        // Update controls state and window configuration
+        controlsEnabled = showMediaControls
+
+        // When controls are shown, raise window level and enable interaction
         // When controls are hidden, return to desktop level
         if showMediaControls {
-            self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)) + 2)
+            // Use a level just below normal windows (0) but high enough to receive events
+            // This keeps it as a background element but makes it interactive
+            self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.normalWindow)) - 1)
+            self.collectionBehavior = [.canJoinAllSpaces, .stationary]  // Remove ignoresCycle
             self.ignoresMouseEvents = false
+            self.orderFront(nil)
+            self.makeKey()
         } else {
             self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)) + 1)
+            self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
             self.ignoresMouseEvents = true
         }
     }
