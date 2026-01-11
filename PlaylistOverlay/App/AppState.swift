@@ -54,9 +54,14 @@ final class AppState: ObservableObject {
     }
 
     /// Whether to show text overlay on wallpaper (persisted via UserDefaults)
-    @AppStorage("wallpaperTextOverlay") var wallpaperTextOverlay = true {
+    @AppStorage("wallpaperTextOverlay") var wallpaperTextOverlay = false {
         didSet {
             wallpaperService.setTextOverlayEnabled(wallpaperTextOverlay)
+            if wallpaperEnabled, let nowPlaying = mediaService.currentlyPlaying {
+                Task {
+                    try? await wallpaperService.updateWallpaper(for: nowPlaying)
+                }
+            }
         }
     }
 
