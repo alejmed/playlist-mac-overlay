@@ -230,7 +230,7 @@ final class AppState: ObservableObject {
     /// Toggles play/pause for the current music source
     func togglePlayPause() async {
         guard let nowPlaying = mediaService.currentlyPlaying else { return }
-        
+
         do {
             switch nowPlaying.source {
             case .spotify:
@@ -238,6 +238,10 @@ final class AppState: ObservableObject {
             case .appleMusic:
                 try await AppleScriptRunner.appleMusicPlayPause()
             }
+
+            // Manually refresh state after a short delay to update UI immediately
+            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            await mediaService.refreshAll()
         } catch {
             print("Failed to toggle play/pause: \(error)")
         }
@@ -246,7 +250,7 @@ final class AppState: ObservableObject {
     /// Goes to previous track for the current music source
     func previousTrack() async {
         guard let nowPlaying = mediaService.currentlyPlaying else { return }
-        
+
         do {
             switch nowPlaying.source {
             case .spotify:
@@ -254,6 +258,10 @@ final class AppState: ObservableObject {
             case .appleMusic:
                 try await AppleScriptRunner.appleMusicPrevious()
             }
+
+            // Manually refresh state after a short delay to update UI immediately
+            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            await mediaService.refreshAll()
         } catch {
             print("Failed to go to previous track: \(error)")
         }
@@ -262,7 +270,7 @@ final class AppState: ObservableObject {
     /// Goes to next track for the current music source
     func nextTrack() async {
         guard let nowPlaying = mediaService.currentlyPlaying else { return }
-        
+
         do {
             switch nowPlaying.source {
             case .spotify:
@@ -270,6 +278,10 @@ final class AppState: ObservableObject {
             case .appleMusic:
                 try await AppleScriptRunner.appleMusicNext()
             }
+
+            // Manually refresh state after a short delay to update UI immediately
+            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+            await mediaService.refreshAll()
         } catch {
             print("Failed to go to next track: \(error)")
         }
