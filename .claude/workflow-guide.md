@@ -552,3 +552,12 @@ The key to successful development on this project:
 6. **Merge** when approved
 
 Follow these patterns and you'll contribute high-quality, maintainable code to the project.
+
+---
+
+## Learnings
+
+- If a UI element is already absent, avoid changing unrelated settings; document that no code change was required for that portion.
+- Keep menu bar changes isolated to `MenuBarView.swift` unless the request explicitly targets Settings.
+- Always switch back to the feature branch before committing when a merge attempt surfaces unstaged changes on `master`.
+- Build output may include system tool warnings (e.g., `actool`, `appintentsmetadataprocessor`) even when the build succeeds.
